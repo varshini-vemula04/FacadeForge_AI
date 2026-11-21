@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hmac
 import io
+import logging
 import os
 import secrets
 import socket
@@ -50,6 +51,7 @@ NEGATIVE_PROMPT = (
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
+logging.getLogger("werkzeug").setLevel(logging.ERROR)
 _pipeline = None
 _pipeline_lock = threading.Lock()
 _inference_lock = threading.Lock()
@@ -209,9 +211,7 @@ def run_server(host: str = "0.0.0.0", port: int = 7860) -> None:
     if not torch.cuda.is_available():
         raise ServerConfigurationError("Colab has no CUDA GPU. Select Runtime > Change runtime type > T4 GPU first.")
     if is_port_in_use(port):
-        print(f"FacadeForge server is already listening on port {port}. Keeping active instance.")
         return
-    print(f"Starting FacadeForge inference server on {host}:{port}...")
     app.run(host=host, port=port, debug=False, threaded=True, use_reloader=False)
 
 
