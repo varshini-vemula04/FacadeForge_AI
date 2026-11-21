@@ -1,0 +1,8 @@
+# Legacy local-inference dependencies. Do not install this file on the Windows website machine.
+# The current architecture runs inference on the Colab GPU; these are only for an optional future local GPU setup.
+# Install a CUDA-compatible PyTorch build separately using https://pytorch.org/get-started/locally/
+diffusers>=0.30
+transformers>=4.44
+accelerate>=0.34
+safetensors>=0.4
+opencv-python-headless>=4.10

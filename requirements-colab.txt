@@ -1,0 +1,3 @@
+# Colab already has the notebook's PyTorch, Diffusers, Transformers and OpenCV stack.
+# Install Flask only if that runtime does not already provide it.
+Flask>=3.0,<4.0

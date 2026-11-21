@@ -1,0 +1,12 @@
+Flask>=3.0,<4.0
+Pillow>=10.0,<13.0
+numpy>=1.26,<3.0
+
+# Optional local inference dependencies; install only in a CUDA-enabled environment.
+# Install a PyTorch build matching the local CUDA version using the official selector.
+# Then install these packages in that same environment:
+# diffusers>=0.30
+# transformers>=4.44
+# accelerate>=0.34
+# safetensors>=0.4
+# opencv-python-headless>=4.10
