@@ -27,7 +27,7 @@ def _load_environment_file(path: Path) -> None:
         if value[:1] in {"'", '"'} and value[-1:] == value[:1]:
             value = value[1:-1]
         if key:
-            os.environ.setdefault(key, value)
+            os.environ[key] = value
 
 
 _load_environment_file(ROOT / ".env")
@@ -45,6 +45,12 @@ app = Flask(
     static_folder=str(ROOT / "frontend" / "static"),
 )
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
+
+
+@app.before_request
+def _refresh_env():
+    """Automatically refresh environment variables from .env on each request."""
+    _load_environment_file(ROOT / ".env")
 
 _jobs: dict[str, dict] = {}
 _jobs_lock = threading.Lock()
