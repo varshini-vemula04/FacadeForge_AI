@@ -91,7 +91,7 @@ def _get_pipeline():
                 local_files_only=True,
             )
             pipeline.scheduler = DPMSolverMultistepScheduler.from_config(pipeline.scheduler.config)
-            pipeline.enable_model_cpu_offload()
+            pipeline = pipeline.to("cuda")
             pipeline.enable_attention_slicing()
             if hasattr(pipeline, "enable_vae_slicing"):
                 pipeline.enable_vae_slicing()
