@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f3f0e9">
+  <title>Workspace — FacadeForge AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <script src="{{ url_for('static', filename='js/workspace.js') }}" defer></script>
+</head>
+<body class="workspace-page">
+  <header class="workspace-header"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">F<span>F</span></span><span>Facade<span class="brand-light">Forge</span><small>AI / ARCHITECTURAL IMAGING</small></span></a><a class="back-link" href="/">← <span>Back to home</span></a></header>
+  <main class="workspace-main">
+    <div class="workspace-title-row"><div><p class="eyebrow">CONCEPT VISUALIZATION / WORKSPACE</p><h1>Facade <em>study.</em></h1><p class="workspace-subtitle">Bring a facade sketch into focus. Choose a visual direction, then create a new architectural study.</p></div><div class="workspace-edition">REMOTE GPU WORKER<br><span>COLAB / SD 1.5 / CONTROLNET CANNY</span></div></div>
+    <div class="workspace-grid">
+      <section class="input-panel" aria-labelledby="input-heading"><div class="panel-heading"><div><span class="step-number">01 / INPUT</span><h2 id="input-heading">Your concept</h2></div><span class="panel-count">SKETCH + STYLE</span></div>
+        <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Choose a PNG or JPG facade sketch"><input type="file" id="sketch-file" accept="image/png,image/jpeg,.png,.jpg,.jpeg" hidden><div class="upload-prompt" id="upload-prompt"><span class="upload-icon">↥</span><strong>Drop your sketch here</strong><span>or <u>browse files</u></span><small>PNG or JPG · up to 8 MB</small></div><div class="preview-wrap" id="preview-wrap" hidden><img id="sketch-preview" alt="Uploaded sketch preview"><button type="button" class="remove-file" id="remove-file" aria-label="Remove sketch">×</button><div class="preview-label" id="preview-label"></div></div></div>
+        <div class="style-heading"><label for="style-select">02 / VISUAL DIRECTION</label><span>SELECT ONE</span></div><select id="style-select" class="style-select"><option value="modern">Modern Minimalist — Clean geometry, glass and quiet concrete</option><option value="luxury">Luxury Contemporary — Natural stone, timber and refined details</option><option value="indian">Traditional Indian — Sandstone, jaali screens and shaded verandah</option><option value="industrial">Industrial — Exposed concrete, steel and textured masonry</option><option value="scandinavian">Scandinavian — Pale timber, soft stone and calm daylight</option></select>
+        <div class="style-description" id="style-description">A restrained palette, clean geometry and considered glazing.</div>
+        <button class="button button-dark generate-button" id="generate-button" type="button" disabled>Generate facade <span>↗</span></button>
+        <div class="generation-status" id="generation-status" role="status" aria-live="polite"><span class="status-dot"></span><span id="status-message">Checking local inference availability…</span></div>
+        <div class="inference-note" id="inference-note"><span class="note-icon">i</span><p>Portfolio images are demonstrations. A workspace result appears only after the connected Colab model generates an image from your uploaded sketch.</p></div>
+      </section>
+      <section class="result-panel" aria-labelledby="result-heading"><div class="panel-heading result-heading"><div><span class="step-number">03 / OUTPUT</span><h2 id="result-heading">Visualization</h2></div><span class="result-state" id="result-state">AWAITING INPUT</span></div>
+        <div class="result-empty" id="result-empty"><div class="empty-architecture" aria-hidden="true"><svg viewBox="0 0 360 240"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M72 198V87l105-62 111 62v111M72 87l105 60 111-60M177 147v51M72 198h216M108 198v-69h45v69m67 0v-66h42v66M72 87h216"/><path d="M42 211h278M57 220h245M177 25V6M288 87l23-13M72 87 49 74" stroke-dasharray="4 5"/></g></svg></div><span class="eyebrow">YOUR CANVAS IS READY</span><p>Upload a facade sketch to begin.<br>Your generated image will appear here.</p></div>
+        <div class="result-content" id="result-content" hidden><div class="comparison-grid"><figure><img id="result-original" alt="Original uploaded facade sketch"><figcaption>ORIGINAL SKETCH</figcaption></figure><figure class="generated-figure"><img id="result-generated" alt="Generated architectural visualization"><figcaption>GENERATED VISUALIZATION <span>AI GENERATED</span></figcaption></figure></div><div class="result-actions"><p>PRELIMINARY CONCEPT VISUALIZATION</p><div><a class="button button-dark download-button" id="download-button" href="#" download>Download image <span>↓</span></a><button class="button button-outline" id="another-button" type="button">New variation ↗</button></div></div></div>
+      </section>
+    </div>
+    <footer class="workspace-footer"><span>FACADEFORGE AI / CONCEPTUAL VISUALIZATION</span><span>ControlNet guides composition; structural details may vary.</span><a href="/">RETURN TO STUDIO ↗</a></footer>
+  </main>
+</body>
+</html>
