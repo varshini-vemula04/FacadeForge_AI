@@ -12,6 +12,7 @@ import hmac
 import io
 import os
 import secrets
+import socket
 import threading
 
 import cv2
@@ -63,6 +64,7 @@ def set_pipeline(pipeline) -> None:
     global _pipeline
     with _pipeline_lock:
         _pipeline = pipeline
+    print("FacadeForge pipeline registered successfully with the inference server.")
 
 
 def _get_pipeline():
@@ -91,7 +93,8 @@ def _get_pipeline():
             pipeline.scheduler = DPMSolverMultistepScheduler.from_config(pipeline.scheduler.config)
             pipeline.enable_model_cpu_offload()
             pipeline.enable_attention_slicing()
-            pipeline.enable_vae_slicing()
+            if hasattr(pipeline, "enable_vae_slicing"):
+                pipeline.enable_vae_slicing()
             _pipeline = pipeline
             return _pipeline
         except Exception as exc:
@@ -191,12 +194,44 @@ def upload_too_large(_error):
     return jsonify(error="Sketch exceeds the 8 MB upload limit."), 413
 
 
+def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(1.0)
+        return sock.connect_ex((host, port)) == 0
+
+
+_server_thread: threading.Thread | None = None
+
+
 def run_server(host: str = "0.0.0.0", port: int = 7860) -> None:
     if not os.getenv("FACADEFORGE_REMOTE_TOKEN"):
         raise ServerConfigurationError("Set FACADEFORGE_REMOTE_TOKEN in the Colab runtime before starting the server.")
     if not torch.cuda.is_available():
         raise ServerConfigurationError("Colab has no CUDA GPU. Select Runtime > Change runtime type > T4 GPU first.")
+    if is_port_in_use(port):
+        print(f"FacadeForge server is already listening on port {port}. Keeping active instance.")
+        return
+    print(f"Starting FacadeForge inference server on {host}:{port}...")
     app.run(host=host, port=port, debug=False, threaded=True, use_reloader=False)
+
+
+def start_server(host: str = "0.0.0.0", port: int = 7860) -> threading.Thread | None:
+    """Safely start the server in a background daemon thread, preventing duplicates."""
+    global _server_thread
+    if _server_thread is not None and _server_thread.is_alive():
+        print("FacadeForge server thread is already active.")
+        return _server_thread
+    if is_port_in_use(port):
+        print(f"FacadeForge server is already listening on port {port}.")
+        return None
+    _server_thread = threading.Thread(
+        target=run_server,
+        kwargs={"host": host, "port": port},
+        daemon=True,
+    )
+    _server_thread.start()
+    print(f"FacadeForge server thread started on {host}:{port}.")
+    return _server_thread
 
 
 if __name__ == "__main__":

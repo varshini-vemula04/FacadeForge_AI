@@ -119,7 +119,8 @@ def _get_pipeline():
             pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
             pipe.enable_model_cpu_offload()
             pipe.enable_attention_slicing()
-            pipe.enable_vae_slicing()
+            if hasattr(pipe, "enable_vae_slicing"):
+                pipe.enable_vae_slicing()
             _pipeline = pipe
             _pipeline_error = None
             return _pipeline

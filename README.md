@@ -22,24 +22,19 @@ The three images in `assets/demo` are portfolio examples only. Generation result
    python -c "import secrets; print(secrets.token_urlsafe(32))"
    ```
 
-7. In a new Colab cell, enter the same secret securely and start the API, reusing the existing `pipe` variable:
+7. In Colab, enter the shared secret securely, register the pipeline, and start the API safely (this is also provided as the final cells in `facade_forge.ipynb`):
 
    ```python
    import getpass
    import os
    import sys
-   import threading
 
    os.environ["FACADEFORGE_REMOTE_TOKEN"] = getpass.getpass("FacadeForge shared token: ")
    sys.path.insert(0, "/content")
 
    import colab_server
    colab_server.set_pipeline(pipe)  # Reuse the notebook pipeline already on the T4.
-   threading.Thread(
-       target=colab_server.run_server,
-       kwargs={"host": "0.0.0.0", "port": 7860},
-       daemon=True,
-   ).start()
+   colab_server.start_server(host="0.0.0.0", port=7860)  # Prevents accidental duplicate port binding
    ```
 
    Keep the Colab runtime and this server thread running while you use the website. The endpoints require the shared bearer token. `/health` does not disclose it.
